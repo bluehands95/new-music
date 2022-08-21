@@ -53,26 +53,24 @@
 	});
 </script>
 
-<div class="w-full flex p-4 my-4 justify-center align-middle text-black">
-	<p class="text-4xl font-title">New Releases</p>
-</div>
 {#if newAlbums}
-	<div class="flex flex-wrap mx-4 justify-center my-4">
+	<div class="bg-cultured">
+		<div class="absolute text-black m-4">
+			<i class="fa-solid fa-bars fa-bars-staggered w-10 fa-3x cursor-pointer" />
+			<i class="fa-solid fa-xmark fa-3x cursor-pointer" />
+		</div>
 		{#each newAlbums as album}
-			<div class="grid text-black m-2 p-3">
-				<div class="flex-auto">
-					<img src={album.images[1].url} alt="" width="210px" />
+			<div class="flex flex-wrap text-center text-black font-title uppercase">
+				<div class="w-screen">
+					{#each album.artists as artist}
+						<h1 class="sm:text-6xl text-4xl">
+							{artist.name}
+						</h1>
+					{/each}
 				</div>
-				<div class="flex-auto my-3">
-					<div class="flex">
-						<h1 class="bold text-lg truncate my-1 w-32">{album.name}</h1>
-					</div>
-					<div class="flex flex-col">
-						{#each album.artists as artist}
-							<h1 class="text-zinc-800 text-base">{artist.name}</h1>
-						{/each}
-					</div>
-				</div>
+				<h1 class="sm:text-4xl text-2xl my-5 flex-auto">
+					{album.name}
+				</h1>
 			</div>
 		{/each}
 	</div>
