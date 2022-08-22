@@ -2,6 +2,10 @@
 	import axios from 'axios';
 	import { onMount } from 'svelte';
 	import { Buffer } from 'buffer';
+	import { currentCountry } from './stores';
+
+	import Menu from './components/Menu.svelte';
+	import CardAlbums from './components/CardAlbums.svelte';
 
 	const clientId = 'ef562f5531dd4903a011992105bbb2f6';
 	const clientSecret = 'ff599668a9a14ea0a573001b7bd237b8';
@@ -9,8 +13,22 @@
 	let token;
 	let newAlbums;
 
+	$: url = `https://api.spotify.com/v1/browse/new-releases?country=${$currentCountry}`;
+
+	$: if (token) {
+		setInterval(() => {
+			getNewReleases($currentCountry);
+		}, 300);
+	}
+
+	$: if (currentCountry) {
+		setInterval(() => {
+			getNewReleases($currentCountry);
+		}, 300);
+	}
+
 	async function getNewReleases() {
-		axios('https://api.spotify.com/v1/browse/new-releases', {
+		axios(url, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
@@ -20,15 +38,10 @@
 		})
 			.then((res) => {
 				newAlbums = res.data.albums.items;
-				console.log(newAlbums);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
-	}
-
-	$: if (token) {
-		getNewReleases();
 	}
 
 	async function getAccessToken() {
@@ -54,24 +67,15 @@
 </script>
 
 {#if newAlbums}
-	<div class="bg-cultured">
-		<div class="absolute text-black m-4">
-			<i class="fa-solid fa-bars fa-bars-staggered w-10 fa-3x cursor-pointer" />
-			<i class="fa-solid fa-xmark fa-3x cursor-pointer" />
-		</div>
-		{#each newAlbums as album}
-			<div class="flex flex-wrap text-center text-black font-title uppercase">
-				<div class="w-screen">
-					{#each album.artists as artist}
-						<h1 class="sm:text-6xl text-4xl">
-							{artist.name}
-						</h1>
-					{/each}
-				</div>
-				<h1 class="sm:text-4xl text-2xl my-5 flex-auto">
-					{album.name}
-				</h1>
-			</div>
-		{/each}
+	<div class="grid md:grid-cols-3 gap-3 cool">
+		<Menu {currentCountry} {token} />
+		<CardAlbums {newAlbums} />
 	</div>
 {/if}
+
+<style>
+	.cool {
+		background-color: #f9564f;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpolygon fill='%23000' fill-opacity='.1' points='120 0 120 60 90 30 60 0 0 0 0 0 60 60 0 120 60 120 90 90 120 60 120 0'/%3E%3C/svg%3E");
+	}
+</style>
