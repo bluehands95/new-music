@@ -3,6 +3,7 @@
 	export let country;
 	const changeCountry = (country) => {
 		currentCountry.set(country);
+		document.body.scrollIntoView();
 	};
 </script>
 

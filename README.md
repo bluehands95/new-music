@@ -1,9 +1,9 @@
 # New albums from Spotify
 
 - [ x ] Fix folder structure
-- [ --- ] Incorporate music recomendations
+- [ ] Incorporate music recomendations
 - [ x ] Add parameters for API (countries)
-- [ ] Add scroll animations
+- [ x ] Add scroll animations
 
 ## Instructions
 
